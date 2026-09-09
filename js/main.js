@@ -186,11 +186,14 @@ function initContactForm() {
       lines.push(val("f-message"));
     }
 
-    var formData = new FormData(form);
+    var formData = new FormData();
+    formData.set("access_key", form.querySelector('[name="access_key"]').value);
+    formData.set("from_name", "Formulaire Bertolis");
+    formData.set("subject", "[Bertolis] Nouvelle demande — " + typeLabel);
     formData.set("name", val("f-name"));
     formData.set("email", val("f-email"));
-    formData.set("subject", "[Bertolis] Nouvelle demande — " + typeLabel);
     formData.set("message", lines.join("\n"));
+    formData.set("botcheck", form.querySelector('[name="botcheck"]').checked ? "1" : "");
 
     var submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
