@@ -8,7 +8,6 @@
 <link rel="icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2c3e57">
-<!-- Domaine provisoire (à confirmer) : remplacer bertolis.fr par le nom de domaine définitif avant mise en ligne -->
 <link rel="canonical" href="https://www.bertolis.fr/contact.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Bertolis">
@@ -36,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 
@@ -85,6 +84,9 @@
 
   <section class="container band band--tight">
     <form id="contact-form">
+      <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
+      <input type="hidden" name="subject" value="Nouvelle demande — Bertolis">
+      <input type="checkbox" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off">
       <p class="eyebrow">Votre demande</p>
       <h2 style="font-size:clamp(22px,2.6vw,28px); margin-bottom:8px;">Quel est votre besoin ?</h2>
       <p style="font-size:15px; color:rgba(44,62,87,0.7); margin-bottom:0;">Choisissez une catégorie pour afficher les questions correspondantes.</p>
@@ -218,8 +220,13 @@
           <textarea id="f-message" name="message" rows="3"></textarea>
         </div>
 
-        <p class="form-note">L'envoi ouvre votre messagerie avec un message pré-rempli à destination de b.bertolis@outlook.com.</p>
+        <div class="form-field--consent">
+          <input type="checkbox" id="f-consent" name="consent" required>
+          <label for="f-consent">J'accepte que les informations transmises via ce formulaire soient utilisées par Bertolis pour traiter ma demande, conformément à la <a href="mentions-legales.html">politique de confidentialité</a>.</label>
+        </div>
+        <p class="form-note">Votre demande est transmise directement à Bertolis, sans passer par votre messagerie.</p>
         <button type="submit" class="btn btn--gold">Envoyer ma demande</button>
+        <div id="form-status" class="form-status" hidden role="status"></div>
       </div>
     </form>
 
@@ -267,6 +274,6 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=7"></script>
+<script src="js/main.js?v=9"></script>
 </body>
 </html>

@@ -78,13 +78,45 @@ function initFloatingContact() {
   a.className = "btn btn--gold mobile-contact-cta";
   a.textContent = "Nous contacter";
   document.body.appendChild(a);
+
+  var hero = document.querySelector(".hero-band");
+  var footer = document.querySelector(".site-footer");
+  if (!("IntersectionObserver" in window)) return;
+
+  var heroVisible = false;
+  var footerVisible = false;
+
+  function update() {
+    a.style.display = heroVisible || footerVisible ? "none" : "";
+  }
+
+  if (hero) {
+    new IntersectionObserver(
+      function (entries) {
+        heroVisible = entries[0].isIntersecting;
+        update();
+      },
+      { threshold: 0.2 }
+    ).observe(hero);
+  }
+
+  if (footer) {
+    new IntersectionObserver(
+      function (entries) {
+        footerVisible = entries[0].isIntersecting;
+        update();
+      },
+      { threshold: 0.01 }
+    ).observe(footer);
+  }
 }
 
 function initContactForm() {
   var form = document.getElementById("contact-form");
   if (!form) return;
 
-  var CONTACT_EMAIL = "b.bertolis@outlook.com";
+  var CONTACT_EMAIL = "contact@bertolis.fr";
+  var status = document.getElementById("form-status");
 
   var fieldsCommon = document.getElementById("fields-common");
   var fieldsApplication = document.getElementById("fields-application");
@@ -113,8 +145,20 @@ function initContactForm() {
     });
   });
 
+  function showStatus(kind, message) {
+    if (!status) return;
+    status.hidden = false;
+    status.className = "form-status form-status--" + kind;
+    status.textContent = message;
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
     var type = form.querySelector('input[name="request-type"]:checked');
     if (!type) return;
 
@@ -126,9 +170,7 @@ function initContactForm() {
 
     var lines = [];
     lines.push("Type de demande : " + typeLabel);
-    lines.push("Nom : " + val("f-name"));
     if (val("f-company")) lines.push("Entreprise : " + val("f-company"));
-    lines.push("E-mail : " + val("f-email"));
     if (val("f-phone")) lines.push("Téléphone : " + val("f-phone"));
     lines.push("");
 
@@ -144,9 +186,37 @@ function initContactForm() {
       lines.push(val("f-message"));
     }
 
-    var subject = "[Bertolis] Nouvelle demande — " + typeLabel;
-    var body = lines.join("\n");
-    window.location.href =
-      "mailto:" + CONTACT_EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    var formData = new FormData(form);
+    formData.set("name", val("f-name"));
+    formData.set("email", val("f-email"));
+    formData.set("subject", "[Bertolis] Nouvelle demande — " + typeLabel);
+    formData.set("message", lines.join("\n"));
+
+    var submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: formData
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.success) {
+          form.reset();
+          fieldsCommon.hidden = true;
+          fieldsApplication.hidden = true;
+          fieldsAdministrative.hidden = true;
+          showStatus("success", "Merci, votre demande a bien été envoyée. Nous vous répondons sous 24h ouvrées.");
+        } else {
+          showStatus("error", "L'envoi a échoué. Vous pouvez nous écrire directement à " + CONTACT_EMAIL + ".");
+        }
+      })
+      .catch(function () {
+        showStatus("error", "L'envoi a échoué (connexion). Vous pouvez nous écrire directement à " + CONTACT_EMAIL + ".");
+      })
+      .finally(function () {
+        if (submitBtn) submitBtn.disabled = false;
+      });
   });
 }

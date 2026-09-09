@@ -664,6 +664,20 @@ a.feature-card { display: block; text-decoration: none; color: inherit; }
   margin-bottom: 8px;
 }
 .form-note { font-size: 13px; color: rgba(44, 62, 87, 0.6); margin: 4px 0 20px; }
+.form-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-field--consent { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 22px; }
+.form-field--consent input { width: 18px; height: 18px; margin-top: 2px; flex: none; accent-color: var(--gold-dark); }
+.form-field--consent label { font-size: 13.5px; font-weight: 400; color: rgba(44, 62, 87, 0.78); line-height: 1.55; margin-bottom: 0; }
+.form-field--consent a { text-decoration: underline; }
+.form-status {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.form-status--success { background: var(--gold-pale); border: 1px solid var(--line-gold); color: var(--marine); }
+.form-status--error { background: #fbeceb; border: 1px solid #e6b6b1; color: #7a2d24; }
 
 .contact-secondary {
   margin-top: 64px;
@@ -733,8 +747,8 @@ a.feature-card { display: block; text-decoration: none; color: inherit; }
 /* ---- responsive ------------------------------------------------------------------------ */
 @media (max-width: 980px) {
   .hero { grid-template-columns: 1fr; gap: 40px; padding: 48px 0 64px; }
-  .hero__visual { order: -1; aspect-ratio: 16 / 9; }
-  .hero__visual--screenshot { aspect-ratio: auto; }
+  .hero__visual { aspect-ratio: 16 / 9; }
+  .hero__visual--screenshot { order: -1; aspect-ratio: auto; }
   .pillars, .two-up, .steps, .card-grid, .feature-grid, .check-list { grid-template-columns: 1fr; }
   .stat-grid { grid-template-columns: 1fr 1fr; row-gap: 32px; }
   .stat-item:nth-child(3) { border-left: 0; padding-left: 0; }
@@ -758,6 +772,7 @@ a.feature-card { display: block; text-decoration: none; color: inherit; }
   .band { padding: 60px 0; }
   .cta-band .container { flex-direction: column; align-items: flex-start; }
   .contact-secondary { align-items: flex-start; }
+  a.link-arrow { padding: 10px 0; margin: -10px 0; }
 
   .mobile-contact-cta {
     display: flex;
