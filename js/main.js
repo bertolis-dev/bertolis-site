@@ -168,31 +168,24 @@ function initContactForm() {
       return el ? el.value.trim() : "";
     };
 
-    var lines = [];
-    lines.push("Type de demande : " + typeLabel);
-    if (val("f-company")) lines.push("Entreprise : " + val("f-company"));
-    if (val("f-phone")) lines.push("Téléphone : " + val("f-phone"));
-    lines.push("");
-
+    var detailLines = [];
     var questions = type.value === "application" ? APPLICATION_QUESTIONS : ADMINISTRATIVE_QUESTIONS;
     questions.forEach(function (q) {
       var v = val(q[0]);
-      if (v) lines.push(q[1] + " : " + v);
+      if (v) detailLines.push(q[1] + " : " + v);
     });
-
-    if (val("f-message")) {
-      lines.push("");
-      lines.push("Précisions complémentaires :");
-      lines.push(val("f-message"));
-    }
+    if (val("f-message")) detailLines.push("Précisions complémentaires : " + val("f-message"));
 
     var formData = new FormData();
     formData.set("access_key", form.querySelector('[name="access_key"]').value);
     formData.set("from_name", "Formulaire Bertolis");
     formData.set("subject", "[Bertolis] Nouvelle demande — " + typeLabel);
-    formData.set("name", val("f-name"));
+    formData.set("Type de demande", typeLabel);
+    formData.set("Nom", val("f-name"));
     formData.set("email", val("f-email"));
-    formData.set("message", lines.join("\n"));
+    if (val("f-company")) formData.set("Entreprise", val("f-company"));
+    if (val("f-phone")) formData.set("Téléphone", val("f-phone"));
+    formData.set("message", detailLines.join("\n"));
     formData.set("botcheck", form.querySelector('[name="botcheck"]').checked ? "1" : "");
 
     var submitBtn = form.querySelector('button[type="submit"]');
