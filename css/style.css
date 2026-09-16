@@ -715,7 +715,7 @@ a.feature-card { display: block; text-decoration: none; color: inherit; }
 .site-footer .container { position: relative; padding-top: 56px; padding-bottom: 30px; }
 .footer-top {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns: 1.1fr 1fr 1fr 1fr;
   gap: 40px;
   padding-bottom: 40px;
 }
